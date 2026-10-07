@@ -1,0 +1,203 @@
+@import 'tailwindcss';
+@import 'lenis/dist/lenis.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ───────────── Design tokens ───────────── */
+@theme {
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --font-cjk: 'Noto Serif SC', 'Fraunces', serif;
+
+  --color-ink-950: #0a0807;
+  --color-ink-900: #110e0c;
+  --color-ink-800: #1a1613;
+  --color-ink-700: #26211d;
+  --color-ink-600: #3a332d;
+
+  --color-pearl-50: #fbf8f3;
+  --color-pearl-100: #f6efe4;
+  --color-pearl-200: #ebdfcc;
+  --color-pearl-300: #d9c8ad;
+
+  --color-lacquer-300: #f08a96;
+  --color-lacquer-400: #e5475b;
+  --color-lacquer-500: #c41e3a;
+  --color-lacquer-600: #a3162f;
+  --color-lacquer-700: #7d1025;
+
+  --color-gold-200: #f3dfb3;
+  --color-gold-300: #ecc983;
+  --color-gold-400: #e0b062;
+  --color-gold-500: #d09a45;
+  --color-gold-600: #a97a2f;
+
+  --color-jade-300: #8fd3bf;
+  --color-jade-400: #55b399;
+  --color-jade-500: #2f8f76;
+  --color-jade-600: #23705c;
+
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snap: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-sway: sway 5s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-pulse-ring: pulse-ring 1.8s var(--ease-silk) infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes sway {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 color-mix(in oklab, currentColor 55%, transparent); }
+    100% { box-shadow: 0 0 0 12px transparent; }
+  }
+}
+
+/* Semantic surface tokens — switch with .dark on <html> */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+}
+
+:root {
+  --bg: #f6f2ec;
+  --surface: #ffffff;
+  --surface-2: #f3eee7;
+  --surface-3: #e9e2d8;
+  --fg: #1b1714;
+  --muted: #74695e;
+  --line: rgb(27 23 20 / 0.09);
+  --line-strong: rgb(27 23 20 / 0.18);
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0c0a09;
+  --surface: #14110f;
+  --surface-2: #1c1815;
+  --surface-3: #26211d;
+  --fg: #f5ede1;
+  --muted: #a69a8b;
+  --line: rgb(245 237 225 / 0.08);
+  --line-strong: rgb(245 237 225 / 0.16);
+  color-scheme: dark;
+}
+
+/* ───────────── Base ───────────── */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-bg text-fg font-sans;
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold-400);
+    outline-offset: 2px;
+  }
+  button { cursor: pointer; }
+  input[type='number']::-webkit-inner-spin-button { -webkit-appearance: none; }
+}
+
+/* ───────────── Utilities ───────────── */
+@utility container-x {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+
+@utility text-gradient-gold {
+  background: linear-gradient(120deg, var(--color-gold-200), var(--color-gold-400) 45%, var(--color-gold-600));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-outline {
+  -webkit-text-stroke: 1px color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+  color: transparent;
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--surface) 62%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@utility pattern-lattice {
+  background-image:
+    radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--color-gold-400) 22%, transparent) 1px, transparent 0);
+  background-size: 26px 26px;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+/* Print only the receipt when printing bills */
+@media print {
+  body * { visibility: hidden !important; }
+  .print-area, .print-area * { visibility: visible !important; }
+  .print-area { position: absolute; inset: 0; color: #000 !important; background: #fff !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,10 @@
+// Public API of the ordering module
+export { useOrdersStore, ORDER_FLOW, STATUS_META, nextStatus } from './store/orders.store'
+export { useCartStore } from './store/cart.store'
+export { computeTotals, discountFor } from './lib/pricing'
+export { placeOrder, advanceOrder, cancelOrder, settleOrders } from './services/order.service'
+export { AddToCart } from './components/AddToCart'
+export { CartDrawer, CartButton } from './components/CartDrawer'
+export { MenuBrowser } from './components/MenuBrowser'
+export { OrderTypeBadge, OrderStatusBadge, OrderStatusStepper, TotalsBlock, TYPE_ICONS } from './components/OrderBits'
+export { useCartTotals } from './hooks/useCartTotals'
